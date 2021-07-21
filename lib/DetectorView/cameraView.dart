@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_text_recognititon/DetectorView/imagecropper/onImageButtonPressed.dart';
+import 'package:flutter_text_recognititon/screens/DisplayPictureScreen.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -112,20 +113,19 @@ class _CameraViewState extends State<CameraView> {
                   child: ElevatedButton(
                     onPressed: () async {
                       await _camera!.stopImageStream();
-                      try {
-                        await _initializeControllerFuture;
-                        _camera!.setFlashMode(FlashMode.off);
-                        final image = await _camera!.takePicture();
-                        /// dfgdfgdfgd
-                        _getImage(onImageButtonPressed(image as ImageSource));
-                        /// Burada bir çalışma sürdürüyorum - bunu düzenleyeceğim
-                        ///
-                        ///
-                        ///
-                        ///
-                      } catch (e) {
-                        print(e);
-                      }
+                      final image = await _camera!.takePicture();
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> DisplayPictureScreen(
+                        imagePath: image.path,
+                      )));
+                      onImageButtonPressed(
+                        _getImage(), context: context,
+                        capturedImageFile: (s) {
+                          print("file path  ${s}");
+                          setState(() {
+                            _image = File(s);
+                          });
+                        },
+                      );
                     },
                     style: ElevatedButton.styleFrom(),
                     child: Container(
@@ -238,7 +238,7 @@ class _CameraViewState extends State<CameraView> {
         padding: EdgeInsets.symmetric(horizontal: 16),
         child: ElevatedButton(
           child: Text('Take a picture'),
-          onPressed: () => _getImage(onImageButtonPressed(ImageSource.camera)),
+          onPressed: () => _getImage(ImageSource.camera)
           /// herhangi bir görsel döndüremiyorum biraz daha incelemem gerekiyor
         ),
       ),
@@ -347,3 +347,21 @@ class _CameraViewState extends State<CameraView> {
     widget.onImage(inputImage);
   }
 }
+
+/*
+await _camera!.stopImageStream();
+                      try {
+                        await _initializeControllerFuture;
+                        _camera!.setFlashMode(FlashMode.off);
+                        final image = await _camera!.takePicture();
+                        /// dfgdfgdfgd
+                        ///
+                        /// Burada bir çalışma sürdürüyorum - bunu düzenleyeceğim
+                        ///
+                        ///
+                        ///
+                        ///
+                      } catch (e) {
+                        print(e);
+                      }
+ */
