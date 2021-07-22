@@ -3,10 +3,8 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_text_recognititon/DetectorView/imagecropper/onImageButtonPressed.dart';
 import 'package:flutter_text_recognititon/screens/DisplayPictureScreen.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../main.dart';
@@ -84,7 +82,7 @@ class _CameraViewState extends State<CameraView> {
         children: [
           _body(),
           Container(
-            //butonlar burada
+            /// butonlar burada
             margin: EdgeInsets.only(
                 top: (MediaQuery.of(context).size.height / 6) * 5),
             child: Row(
@@ -115,9 +113,8 @@ class _CameraViewState extends State<CameraView> {
                       await _camera!.stopImageStream();
                       final image = await _camera!.takePicture();
                       Navigator.push(context, MaterialPageRoute(builder: (context)=> DisplayPictureScreen(
-                        imagePath: image.path,
-                      )));
-                      onImageButtonPressed(
+                        imagePath: image.path)));
+                      /*onImageButtonPressed(
                         _getImage(), context: context,
                         capturedImageFile: (s) {
                           print("file path  ${s}");
@@ -125,7 +122,7 @@ class _CameraViewState extends State<CameraView> {
                             _image = File(s);
                           });
                         },
-                      );
+                      );*/
                     },
                     style: ElevatedButton.styleFrom(),
                     child: Container(
