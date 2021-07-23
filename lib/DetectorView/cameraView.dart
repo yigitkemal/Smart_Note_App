@@ -83,8 +83,9 @@ class _CameraViewState extends State<CameraView> {
           _body(),
           Container(
             /// butonlar burada
+            alignment: Alignment.bottomCenter,
             margin: EdgeInsets.only(
-                top: (MediaQuery.of(context).size.height / 6) * 5),
+                bottom: (MediaQuery.of(context).size.height / 10) ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -102,7 +103,17 @@ class _CameraViewState extends State<CameraView> {
                             bottomLeft: Radius.circular(50)),
                       ),
                     ),
-                    child: Icon(Icons.photo),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text("Galeri"),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Icon(Icons.photo),
+                      ],
+                    ),
                   ),
                 ),
                 Container(
@@ -113,20 +124,14 @@ class _CameraViewState extends State<CameraView> {
                       await _camera!.stopImageStream();
                       final image = await _camera!.takePicture();
                       Navigator.push(context, MaterialPageRoute(builder: (context)=> DisplayPictureScreen(
-                        imagePath: image.path)));
-                      /*onImageButtonPressed(
-                        _getImage(), context: context,
-                        capturedImageFile: (s) {
-                          print("file path  ${s}");
-                          setState(() {
-                            _image = File(s);
-                          });
-                        },
-                      );*/
+                        imagePath: image.path, onImage: (InputImage inputImage) {},)));
                     },
-                    style: ElevatedButton.styleFrom(),
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(0)),
+                      )
+                    ),
                     child: Container(
-                      //margin: EdgeInsets.all(5),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -236,7 +241,6 @@ class _CameraViewState extends State<CameraView> {
         child: ElevatedButton(
           child: Text('Take a picture'),
           onPressed: () => _getImage(ImageSource.camera)
-          /// herhangi bir görsel döndüremiyorum biraz daha incelemem gerekiyor
         ),
       ),
     ]);

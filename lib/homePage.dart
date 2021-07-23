@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_text_recognititon/DetectorView/cameraView.dart';
 import 'package:flutter_text_recognititon/DetectorView/textDetectorView.dart';
 import 'package:flutter_text_recognititon/components/dashboardDrawerWidget.dart';
 import 'package:flutter_text_recognititon/components/filterNoteByColorDialogWidget.dart';
@@ -12,7 +11,6 @@ import 'package:flutter_text_recognititon/components/noteLayoutDialogWidget.dart
 import 'package:flutter_text_recognititon/components/setMasterPasswordDialogWidget.dart';
 import 'package:flutter_text_recognititon/main.dart';
 import 'package:flutter_text_recognititon/model/notesModel.dart';
-import 'package:flutter_text_recognititon/screens/DashboardScreen.dart';
 import 'package:flutter_text_recognititon/screens/addNotesScreen.dart';
 import 'package:flutter_text_recognititon/screens/addToDoScreen.dart';
 import 'package:flutter_text_recognititon/utils/colors.dart';

@@ -6,16 +6,25 @@ import 'package:flutter_text_recognititon/DetectorView/imagecropper/onImageButto
 import 'package:flutter_text_recognititon/DetectorView/painters/text_detector_painter.dart';
 import 'package:flutter_text_recognititon/DetectorView/textDetectorView.dart';
 import 'package:flutter_text_recognititon/homePage.dart';
+import 'package:flutter_text_recognititon/main.dart';
+import 'package:flutter_text_recognititon/model/notesModel.dart';
+import 'package:flutter_text_recognititon/screens/addNotesScreen.dart';
+import 'package:flutter_text_recognititon/utils/colors.dart';
 import 'package:flutter_text_recognititon/utils/constants.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:nb_utils/nb_utils.dart';
 
 class DisplayPictureScreen extends StatefulWidget {
+
+
+  const DisplayPictureScreen({Key? key, required this.imagePath, required this.onImage})
+      : super(key: key);
+
+  final Function(InputImage inputImage) onImage;
   final String imagePath;
 
-  const DisplayPictureScreen({Key? key, required this.imagePath})
-      : super(key: key);
 
   @override
   _DisplayPictureScreenState createState() => _DisplayPictureScreenState();
@@ -23,6 +32,10 @@ class DisplayPictureScreen extends StatefulWidget {
 
 class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
   File? _image;
+  bool isBusy = false;
+  CustomPaint? customPaint;
+  TextDetector textDetector = GoogleMlKit.vision.textDetector();
+  NotesModel? notes = NotesModel();
 
   @override
   void initState() {
@@ -46,7 +59,31 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
                 padding: const EdgeInsets.symmetric(
                     vertical: 40.0, horizontal: 20.0),
                 child: _image != null
-                    ? Image.file(_image!) // Buraya bir gövde oluşturup not sayfasına akarımı sağlamam gerekli
+                    ? Container(
+                  width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    child: Stack(
+                      children: [
+                        Container(
+                            alignment: Alignment.center,
+                            child: Image.file(_image!)),
+                        Container(
+                          alignment: Alignment.bottomCenter,
+                          margin: EdgeInsets.only(
+                              bottom: (MediaQuery.of(context).size.height / 10) ),
+                          child: AppButton(
+                            height: 60,
+                            width: context.width(),
+                            color: PrimaryBackgroundColor,
+                            text: 'Not Olarak Oku',
+                            textColor: appStore.isDarkMode ? splashBgColor : scaffoldColorDark,
+                            onTap: () {
+                              processImage(InputImage.fromFilePath(_image!.path));
+                            },
+                          ),
+                        ),
+                      ],
+                    )) // Buraya bir gövde oluşturup not sayfasına akarımı sağlamam gerekli
                     : Container(
                         color: Colors.green,
                       ),
@@ -77,8 +114,39 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
         _image = val as File;
       }
     });
+  }
+
+  Future<void> processImage(InputImage inputImage) async {
+    
+    
+    if (isBusy) return;
+    isBusy = true;
+    final recognisedText = await textDetector.processImage(inputImage);
+    print('Found ${recognisedText.blocks.length} textBlocks');
+    print(recognisedText.text + '*************************************************************************---');
+    notes!.note = recognisedText.text;
+
+    if(notes!.note != null)
+      AddNotesScreen(notesModel: notes).launch(context);
+
+    if (inputImage.inputImageData?.size != null &&
+        inputImage.inputImageData?.imageRotation != null) {
+      final painter = TextDetectorPainter(
+          recognisedText,
+          inputImage.inputImageData!.size,
+          inputImage.inputImageData!.imageRotation);
+      customPaint = CustomPaint(painter: painter);
+    } else {
+      customPaint = null;
+    }
+    isBusy = false;
+    if (mounted) {
+      setState(() {});
+    }
+    
 
   }
+
 
 
 }
