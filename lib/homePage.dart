@@ -123,14 +123,18 @@ class _HomeState extends State<Home>{
                   ],
                   pinned: true,
                   expandedHeight: 200,
-                  flexibleSpace: FlexibleSpaceBar(
-                    centerTitle: true,
-                    title: Text('Post-It'),
-                    background: Image.asset(
-                      "images/appbar_background.jpeg",
-                      fit: BoxFit.cover,
-                      colorBlendMode: BlendMode.lighten ,
-                      color: appStore.isDarkMode ? splashBgColor: PrimaryBackgroundColor.withOpacity(0.8),
+                  flexibleSpace: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8),bottomRight: Radius.circular(8)) ,
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomLeft,
+                        end: Alignment.topRight,
+                        colors: appStore.isDarkMode ? [scaffoldColorDark, Colors.deepPurple.withOpacity(0.2)] : [PrimaryColor, Colors.blueGrey.withOpacity(0.2)],
+                      ),
+                    ),
+                    child: FlexibleSpaceBar(
+                      centerTitle: true,
+                      title: Text('Post-It'),
                     ),
                   ),
                   shape: ContinuousRectangleBorder(

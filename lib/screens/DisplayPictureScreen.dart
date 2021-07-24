@@ -2,10 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_text_recognititon/DetectorView/imagecropper/onImageButtonPressed.dart';
 import 'package:flutter_text_recognititon/DetectorView/painters/text_detector_painter.dart';
-import 'package:flutter_text_recognititon/DetectorView/textDetectorView.dart';
-import 'package:flutter_text_recognititon/homePage.dart';
 import 'package:flutter_text_recognititon/main.dart';
 import 'package:flutter_text_recognititon/model/notesModel.dart';
 import 'package:flutter_text_recognititon/screens/addNotesScreen.dart';
@@ -13,7 +10,6 @@ import 'package:flutter_text_recognititon/utils/colors.dart';
 import 'package:flutter_text_recognititon/utils/constants.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class DisplayPictureScreen extends StatefulWidget {
@@ -35,7 +31,11 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
   bool isBusy = false;
   CustomPaint? customPaint;
   TextDetector textDetector = GoogleMlKit.vision.textDetector();
-  NotesModel? notes = NotesModel();
+
+
+  Color? _mSelectColor;
+  List<String> collaborateList = [];
+  NotesModel notes = NotesModel();
 
   @override
   void initState() {
@@ -117,17 +117,29 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
   }
 
   Future<void> processImage(InputImage inputImage) async {
-    
-    
     if (isBusy) return;
     isBusy = true;
     final recognisedText = await textDetector.processImage(inputImage);
     print('Found ${recognisedText.blocks.length} textBlocks');
     print(recognisedText.text + '*************************************************************************---');
-    notes!.note = recognisedText.text;
 
-    if(notes!.note != null)
-      AddNotesScreen(notesModel: notes).launch(context);
+    notes.userId = getStringAsync(USER_ID);
+    notes.noteTitle = ("").trim();
+    notes.note = recognisedText.text.trim();
+
+    if (_mSelectColor != null) {
+      notes.color = _mSelectColor!.toHex().toString();
+    } else {
+      notes.color = Colors.white.toHex();
+    }
+
+    notes.createdAt = DateTime.now();
+    notes.updatedAt = DateTime.now();
+    notes.collaborateWith = collaborateList.validate();
+    notes.checkListModel = [];
+
+
+    notes.note!.isEmpty ? Center(child: CircularProgressIndicator(),) :  AddNotesScreen(notesModel: notes,).launch(context);
 
     if (inputImage.inputImageData?.size != null &&
         inputImage.inputImageData?.imageRotation != null) {
