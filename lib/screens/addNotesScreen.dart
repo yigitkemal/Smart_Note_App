@@ -17,8 +17,9 @@ import '../main.dart';
 class AddNotesScreen extends StatefulWidget {
   static String tag = '/AddNotesScreen';
   final NotesModel? notesModel;
+  final String? comingString;
 
-  AddNotesScreen({this.notesModel});
+  AddNotesScreen({this.notesModel,this.comingString});
 
   @override
   AddNotesScreenState createState() => AddNotesScreenState();
@@ -59,6 +60,9 @@ class AddNotesScreenState extends State<AddNotesScreen> {
       notesController.text = widget.notesModel!.note!;
       _mSelectColor = getColorFromHex(widget.notesModel!.color!);
     }
+
+    if(widget.comingString != null)
+      notesController.text = widget.comingString!;
 
     if (!disabled_ads) {
       if (adShowCount < 5) {
@@ -131,7 +135,6 @@ class AddNotesScreenState extends State<AddNotesScreen> {
             color: scaffoldColorDark,
             onPressed: () async {
               hideKeyboard(context);
-
               noteColorPicker();
             },
           ),

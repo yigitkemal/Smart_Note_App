@@ -13,14 +13,12 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class DisplayPictureScreen extends StatefulWidget {
-
-
-  const DisplayPictureScreen({Key? key, required this.imagePath, required this.onImage})
+  const DisplayPictureScreen(
+      {Key? key, required this.imagePath, required this.onImage})
       : super(key: key);
 
   final Function(InputImage inputImage) onImage;
   final String imagePath;
-
 
   @override
   _DisplayPictureScreenState createState() => _DisplayPictureScreenState();
@@ -32,10 +30,10 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
   CustomPaint? customPaint;
   TextDetector textDetector = GoogleMlKit.vision.textDetector();
 
-
   Color? _mSelectColor;
   List<String> collaborateList = [];
-  NotesModel notes = NotesModel();
+  //NotesModel _notes = NotesModel();
+  String? okunanText;
 
   @override
   void initState() {
@@ -60,30 +58,34 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
                     vertical: 40.0, horizontal: 20.0),
                 child: _image != null
                     ? Container(
-                  width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    child: Stack(
-                      children: [
-                        Container(
-                            alignment: Alignment.center,
-                            child: Image.file(_image!)),
-                        Container(
-                          alignment: Alignment.bottomCenter,
-                          margin: EdgeInsets.only(
-                              bottom: (MediaQuery.of(context).size.height / 10) ),
-                          child: AppButton(
-                            height: 60,
-                            width: context.width(),
-                            color: PrimaryBackgroundColor,
-                            text: 'Not Olarak Oku',
-                            textColor: appStore.isDarkMode ? splashBgColor : scaffoldColorDark,
-                            onTap: () {
-                              processImage(InputImage.fromFilePath(_image!.path));
-                            },
-                          ),
-                        ),
-                      ],
-                    )) // Buraya bir gövde oluşturup not sayfasına akarımı sağlamam gerekli
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                        child: Stack(
+                          children: [
+                            Container(
+                                alignment: Alignment.center,
+                                child: Image.file(_image!)),
+                            Container(
+                              alignment: Alignment.bottomCenter,
+                              margin: EdgeInsets.only(
+                                  bottom: (MediaQuery.of(context).size.height /
+                                      10)),
+                              child: AppButton(
+                                height: 60,
+                                width: context.width(),
+                                color: PrimaryBackgroundColor,
+                                text: 'Not Olarak Oku',
+                                textColor: appStore.isDarkMode
+                                    ? splashBgColor
+                                    : scaffoldColorDark,
+                                onTap: () {
+                                  processImage(
+                                      InputImage.fromFilePath(_image!.path));
+                                },
+                              ),
+                            ),
+                          ],
+                        )) // Buraya bir gövde oluşturup not sayfasına akarımı sağlamam gerekli
                     : Container(
                         color: Colors.green,
                       ),
@@ -121,25 +123,17 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
     isBusy = true;
     final recognisedText = await textDetector.processImage(inputImage);
     print('Found ${recognisedText.blocks.length} textBlocks');
-    print(recognisedText.text + '*************************************************************************---');
-
-    notes.userId = getStringAsync(USER_ID);
-    notes.noteTitle = ("").trim();
-    notes.note = recognisedText.text.trim();
-
-    if (_mSelectColor != null) {
-      notes.color = _mSelectColor!.toHex().toString();
-    } else {
-      notes.color = Colors.white.toHex();
-    }
-
-    notes.createdAt = DateTime.now();
-    notes.updatedAt = DateTime.now();
-    notes.collaborateWith = collaborateList.validate();
-    notes.checkListModel = [];
+    //kesilmiş ekranda notu buraya almayı başarabiliyorum, not modelin içine yollayacak şekilde doldurup. AddNotesScreene yollayabilirsem problemim çözülecek
+    ///notu burada okuyabiliyorum AddNotesScreene buradaki texti yollayabilmem gerekli.
+    print(recognisedText.text +
+        '*************************************************************************---');
 
 
-    notes.note!.isEmpty ? Center(child: CircularProgressIndicator(),) :  AddNotesScreen(notesModel: notes,).launch(context);
+    okunanText = recognisedText.text.trim();
+
+
+
+
 
     if (inputImage.inputImageData?.size != null &&
         inputImage.inputImageData?.imageRotation != null) {
@@ -155,12 +149,24 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
     if (mounted) {
       setState(() {});
     }
-    
+
+
+    setState(() {
+      okunanText == null
+          ? Center(
+        child: CircularProgressIndicator(),
+      )
+          : Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  AddNotesScreen(
+                    comingString: okunanText,
+                  )));
+    });
+
 
   }
-
-
-
 }
 
 /*

@@ -89,6 +89,9 @@ class _HomeState extends State<Home>{
                 (BuildContext context, bool innerBoxIsScrolled) {
               return <Widget>[
                 SliverAppBar(
+                  centerTitle: true,
+                  title: Container(
+                      child: Text(mAppName,style: TextStyle(fontSize: 24,),)),
                   actions: [
                     IconButton(
                       icon: Icon(
@@ -122,19 +125,76 @@ class _HomeState extends State<Home>{
                     ),
                   ],
                   pinned: true,
-                  expandedHeight: 200,
+                  expandedHeight: MediaQuery.of(context).size.height/6,
                   flexibleSpace: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8),bottomRight: Radius.circular(8)) ,
                       gradient: LinearGradient(
                         begin: Alignment.bottomLeft,
                         end: Alignment.topRight,
-                        colors: appStore.isDarkMode ? [scaffoldColorDark, Colors.deepPurple.withOpacity(0.2)] : [PrimaryColor, Colors.blueGrey.withOpacity(0.2)],
+                        colors: appStore.isDarkMode ? [scaffoldColorDark, splashBgColor.withOpacity(0.2)] : [PrimaryColor, blueGreyColor.withOpacity(0.2)],
                       ),
                     ),
                     child: FlexibleSpaceBar(
                       centerTitle: true,
-                      title: Text('Post-It'),
+                      background: Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.symmetric(vertical: 20,horizontal: 20),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    flex: 5,
+                                    child: Container(
+                                      margin: EdgeInsets.only(right: 10),
+                                      alignment: Alignment.center,
+                                      height: 50.0,
+                                      //width: MediaQuery.of(context).size.width-100,
+                                      padding: EdgeInsets.only(left: 8.0),
+                                      decoration: BoxDecoration(
+                                          color: Colors.white.withOpacity(0.3),
+                                          borderRadius: BorderRadius.circular(8.0)),
+                                      child: TextField(
+                                        style: TextStyle(fontSize: 15.0, color: Colors.white),
+                                        decoration: InputDecoration(
+                                          hintText: "Aradığınız kelimeyi giriniz...",
+                                          hintStyle: TextStyle(
+                                            color: appStore.isDarkMode ? scaffoldLightColor : scaffoldColorDark,
+                                          ),
+                                          border: InputBorder.none,
+                                          prefixIcon: IconButton(
+                                            onPressed: () {},
+                                            color: appStore.isDarkMode ? scaffoldLightColor : scaffoldColorDark,
+                                            icon: Icon(Icons.search),
+                                            iconSize: 20,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                      flex: 1,
+                                      child: Container(
+                                          height: 50,
+                                          child: ElevatedButton(
+                                            onPressed: () {},
+                                            child: Icon(Icons.filter_list_outlined),
+                                            style: ElevatedButton.styleFrom(
+                                                primary: Colors.amber,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(8.0),
+                                                )
+                                            ),
+                                          )))
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                   shape: ContinuousRectangleBorder(
