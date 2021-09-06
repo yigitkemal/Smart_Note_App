@@ -28,7 +28,10 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home>{
   GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
+  TextEditingController searchedTextController = new TextEditingController();
+
   String colorFilter = '';
+  String searchedText = '';
 
   late int crossAxisCount;
   late int fitWithCount;
@@ -50,6 +53,7 @@ class _HomeState extends State<Home>{
       style: optionstyle,
     ),
   ];
+
 
   void _onItemTapped(int index) {
     setState(() {
@@ -158,7 +162,13 @@ class _HomeState extends State<Home>{
                                           color: Colors.white.withOpacity(0.3),
                                           borderRadius: BorderRadius.circular(8.0)),
                                       child: TextField(
+                                        controller: searchedTextController,
                                         style: TextStyle(fontSize: 15.0, color: Colors.white),
+                                        onChanged: (value){
+                                          setState(() {
+                                            searchedText = value;
+                                          });
+                                        },
                                         decoration: InputDecoration(
                                           hintText: "Aradığınız kelimeyi giriniz...",
                                           hintStyle: TextStyle(
@@ -175,6 +185,7 @@ class _HomeState extends State<Home>{
                                       ),
                                     ),
                                   ),
+                                  // aramanın yanındaki sarı buton
                                   Expanded(
                                       flex: 1,
                                       child: Container(
@@ -208,6 +219,7 @@ class _HomeState extends State<Home>{
               child: sayfaGoster(_selectedIndex),
             ),
           ),
+          //not eklemek için bulunan postitlerim
           Container(
             alignment: Alignment.bottomLeft,
             margin: EdgeInsets.only(
@@ -269,7 +281,7 @@ class _HomeState extends State<Home>{
   Widget sayfaGoster(int seciliSayfa) {
     if (seciliSayfa == 0) {
       return StreamBuilder<List<NotesModel>>(
-        stream: notesService.fetchNotes(color: colorFilter),
+        stream: notesService.fetchNotes(color: colorFilter,searchedText: searchedText),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data!.length == 0) {
@@ -285,138 +297,147 @@ class _HomeState extends State<Home>{
                   padding: EdgeInsets.only(left: 8, top: 8, right: 8),
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
-                    NotesModel notes = snapshot.data![index];
 
-                    if (notes.checkListModel.validate().isNotEmpty) {
-                      return GestureDetector(
-                        onLongPress: () {
-                          HapticFeedback.vibrate();
-                          lockNoteOption(notesModel: notes);
-                        },
-                        child: Container(
-                          decoration: boxDecorationWithShadow(
-                            borderRadius: BorderRadius.circular(8),
-                            backgroundColor: getColorFromHex(notes.color!),
-                            spreadRadius: 0.0,
-                            blurRadius: 0.0,
-                            border: Border.all(color: Colors.grey.shade400),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              notes.isLock!
-                                  ? Container(child: Icon(Icons.lock, color: scaffoldColorDark)).paddingOnly(top: 16).center()
-                                  : ListView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: notes.checkListModel!.take(5).length,
-                                itemBuilder: (_, index) {
-                                  CheckListModel checkListData = notes.checkListModel![index];
+                      NotesModel notes = snapshot.data![index];
 
-                                  return Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        height: 12,
-                                        width: 12,
-                                        decoration: BoxDecoration(color: Colors.transparent, border: Border.all(color: Colors.black)),
-                                        child: checkListData.isCompleted! ? Icon(Icons.check, size: 10, color: Colors.black) : SizedBox(),
-                                      ).paddingAll(8),
-                                      Text(
-                                        checkListData.todo.validate(),
-                                        style: primaryTextStyle(
-                                          decoration: checkListData.isCompleted! ? TextDecoration.lineThrough : TextDecoration.none,
-                                          color: checkListData.isCompleted! ? Colors.grey : Colors.black,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ).expand(),
-                                    ],
+                      if(notes.note != null){
+                        if(!(notes.note!.toLowerCase().contains(searchedText.toLowerCase()))){
+                          return Container(color: Colors.pink,);
+                        }else{
+                          if (notes.checkListModel.validate().isNotEmpty) {
+                            return GestureDetector(
+                              onLongPress: () {
+                                HapticFeedback.vibrate();
+                                lockNoteOption(notesModel: notes);
+                              },
+                              child: Container(
+                                decoration: boxDecorationWithShadow(
+                                  borderRadius: BorderRadius.circular(8),
+                                  backgroundColor: getColorFromHex(notes.color!),
+                                  spreadRadius: 0.0,
+                                  blurRadius: 0.0,
+                                  border: Border.all(color: Colors.grey.shade400),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    notes.isLock!
+                                        ? Container(child: Icon(Icons.lock, color: scaffoldColorDark)).paddingOnly(top: 16).center()
+                                        : ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemCount: notes.checkListModel!.take(5).length,
+                                      itemBuilder: (_, index) {
+                                        CheckListModel checkListData = notes.checkListModel![index];
+
+                                        return Row(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              height: 12,
+                                              width: 12,
+                                              decoration: BoxDecoration(color: Colors.transparent, border: Border.all(color: Colors.black)),
+                                              child: checkListData.isCompleted! ? Icon(Icons.check, size: 10, color: Colors.black) : SizedBox(),
+                                            ).paddingAll(8),
+                                            Text(
+                                              checkListData.todo.validate(),
+                                              style: primaryTextStyle(
+                                                decoration: checkListData.isCompleted! ? TextDecoration.lineThrough : TextDecoration.none,
+                                                color: checkListData.isCompleted! ? Colors.grey : Colors.black,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                            ).expand(),
+                                          ],
+                                        );
+                                      },
+                                    ).paddingTop(8),
+                                    notes.checkListModel!.length > 5 ? Text('more...', style: secondaryTextStyle()).paddingLeft(8) : SizedBox(),
+                                    Align(
+                                      child: Text(formatTime(notes.updatedAt!.millisecondsSinceEpoch.validate()), style: secondaryTextStyle(size: 10, color: Colors.grey.shade900)),
+                                      alignment: Alignment.bottomRight,
+                                    ).paddingAll(16),
+                                    notes.collaborateWith!.first != getStringAsync(USER_EMAIL)
+                                        ? Container(
+                                      padding: EdgeInsets.all(12),
+                                      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.grey.shade300),
+                                      child: Text(notes.collaborateWith!.first![0], style: boldTextStyle(color: Colors.black, size: 12)),
+                                    ).paddingOnly(left: 16, bottom: 16)
+                                        : SizedBox()
+                                  ],
+                                ),
+                              ).onTap(() {
+                                if (notes.isLock!) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) => LockNoteDialogWidget(onSubmit: (aIsRight) {
+                                      finish(context);
+                                      AddToDoScreen(notesModel: notes).launch(context);
+                                    }),
                                   );
-                                },
-                              ).paddingTop(8),
-                              notes.checkListModel!.length > 5 ? Text('more...', style: secondaryTextStyle()).paddingLeft(8) : SizedBox(),
-                              Align(
-                                child: Text(formatTime(notes.updatedAt!.millisecondsSinceEpoch.validate()), style: secondaryTextStyle(size: 10, color: Colors.grey.shade900)),
-                                alignment: Alignment.bottomRight,
-                              ).paddingAll(16),
-                              notes.collaborateWith!.first != getStringAsync(USER_EMAIL)
-                                  ? Container(
-                                padding: EdgeInsets.all(12),
-                                decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.grey.shade300),
-                                child: Text(notes.collaborateWith!.first![0], style: boldTextStyle(color: Colors.black, size: 12)),
-                              ).paddingOnly(left: 16, bottom: 16)
-                                  : SizedBox()
-                            ],
-                          ),
-                        ).onTap(() {
-                          if (notes.isLock!) {
-                            showDialog(
-                              context: context,
-                              builder: (_) => LockNoteDialogWidget(onSubmit: (aIsRight) {
-                                finish(context);
-                                AddToDoScreen(notesModel: notes).launch(context);
+                                } else {
+                                  AddToDoScreen(notesModel: notes).launch(context);
+                                }
                               }),
                             );
                           } else {
-                            AddToDoScreen(notesModel: notes).launch(context);
-                          }
-                        }),
-                      );
-                    } else {
-                      return GestureDetector(
-                        onLongPress: () {
-                          HapticFeedback.vibrate();
-                          lockNoteOption(notesModel: notes);
-                        },
-                        child: Container(
-                          padding: EdgeInsets.all(16),
-                          decoration: boxDecorationWithShadow(
-                            borderRadius: BorderRadius.circular(defaultRadius),
-                            backgroundColor: getColorFromHex(notes.color!),
-                            spreadRadius: 0.0,
-                            blurRadius: 0.0,
-                            border: Border.all(color: Colors.grey.shade400),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              notes.isLock!
-                                  ? Container(child: Icon(Icons.lock, color: scaffoldColorDark)).paddingOnly(top: 8, bottom: 8).center()
-                                  : Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(notes.noteTitle.validate(), style: boldTextStyle(color: Colors.black), maxLines: 1, textAlign: TextAlign.start, overflow: TextOverflow.ellipsis),
-                                  Text(notes.note!, style: primaryTextStyle(size: 12, color: Colors.black), maxLines: 10, textAlign: TextAlign.start, overflow: TextOverflow.ellipsis),
-                                ],
-                              ),
-                              Align(
-                                child: Text(formatTime(notes.updatedAt!.millisecondsSinceEpoch.validate()), style: secondaryTextStyle(size: 10, color: Colors.grey.shade900)),
-                                alignment: Alignment.bottomRight,
-                              ),
-                              notes.collaborateWith!.first != getStringAsync(USER_EMAIL)
-                                  ? Container(
-                                padding: EdgeInsets.all(12),
-                                decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.grey.shade300),
-                                child: Text(notes.collaborateWith!.first![0], style: boldTextStyle(color: Colors.black, size: 12)),
-                              )
-                                  : SizedBox()
-                            ],
-                          ).onTap(() {
-                            if (notes.isLock!) {
-                              showDialog(
-                                context: context,
-                                builder: (_) => LockNoteDialogWidget(onSubmit: (aIsRight) {
-                                  finish(context);
-                                  AddNotesScreen(notesModel: notes).launch(context);
+                            return GestureDetector(
+                              onLongPress: () {
+                                HapticFeedback.vibrate();
+                                lockNoteOption(notesModel: notes);
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(16),
+                                decoration: boxDecorationWithShadow(
+                                  borderRadius: BorderRadius.circular(defaultRadius),
+                                  backgroundColor: getColorFromHex(notes.color!),
+                                  spreadRadius: 0.0,
+                                  blurRadius: 0.0,
+                                  border: Border.all(color: Colors.grey.shade400),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    notes.isLock!
+                                        ? Container(child: Icon(Icons.lock, color: scaffoldColorDark)).paddingOnly(top: 8, bottom: 8).center()
+                                        : Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(notes.noteTitle.validate(), style: boldTextStyle(color: Colors.black), maxLines: 1, textAlign: TextAlign.start, overflow: TextOverflow.ellipsis),
+                                        Text(notes.note!, style: primaryTextStyle(size: 12, color: Colors.black), maxLines: 10, textAlign: TextAlign.start, overflow: TextOverflow.ellipsis),
+                                      ],
+                                    ),
+                                    Align(
+                                      child: Text(formatTime(notes.updatedAt!.millisecondsSinceEpoch.validate()), style: secondaryTextStyle(size: 10, color: Colors.grey.shade900)),
+                                      alignment: Alignment.bottomRight,
+                                    ),
+                                    notes.collaborateWith!.first != getStringAsync(USER_EMAIL)
+                                        ? Container(
+                                      padding: EdgeInsets.all(12),
+                                      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.grey.shade300),
+                                      child: Text(notes.collaborateWith!.first![0], style: boldTextStyle(color: Colors.black, size: 12)),
+                                    )
+                                        : SizedBox()
+                                  ],
+                                ).onTap(() {
+                                  if (notes.isLock!) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (_) => LockNoteDialogWidget(onSubmit: (aIsRight) {
+                                        finish(context);
+                                        AddNotesScreen(notesModel: notes).launch(context);
+                                      }),
+                                    );
+                                  } else {
+                                    AddNotesScreen(notesModel: notes).launch(context);
+                                  }
                                 }),
-                              );
-                            } else {
-                              AddNotesScreen(notesModel: notes).launch(context);
-                            }
-                          }),
-                        ),
-                      );
-                    }
+                              ),
+                            );
+                          }
+                        }
+                      }else{
+                        return Container();
+                      }
                   },
                 ),
               );
