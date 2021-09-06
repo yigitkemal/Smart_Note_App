@@ -90,7 +90,9 @@ class DashboardDrawerWidgetState extends State<DashboardDrawerWidget> {
                     finish(context);
                     Home().launch(context);
                   }),
-                  Row(
+
+                  //abonelik alanı bu alan sonrası için düşünülebilir
+                  /*Row(
                     children: [
                       Icon(Icons.notifications_active_outlined),
                       16.width,
@@ -99,7 +101,9 @@ class DashboardDrawerWidgetState extends State<DashboardDrawerWidget> {
                   ).paddingAll(16).onTap(() {
                     finish(context);
                     SubscriptionReminderListScreen().launch(context);
-                  }),
+                  }),*/
+
+
                   Row(
                     children: [
                       Icon(Icons.lock_outline_rounded),

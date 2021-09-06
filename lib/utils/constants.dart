@@ -1,4 +1,4 @@
-const mAppName = 'Post it';
+const mAppName = 'Racoon Note';
 
 const imageRadius = 40.0;
 

@@ -97,14 +97,14 @@ class _HomeState extends State<Home>{
                   title: Container(
                       child: Text(mAppName,style: TextStyle(fontSize: 24,),)),
                   actions: [
-                    IconButton(
+                    /*IconButton(
                       icon: Icon(
                         Icons.color_lens_outlined,
                       ),
                       onPressed: () {
                           filterByColor();
                       },
-                    ),
+                    ),*/
                     ElevatedButton(
                       child: CircleAvatar(
                         child: CircleAvatar(
@@ -191,8 +191,10 @@ class _HomeState extends State<Home>{
                                       child: Container(
                                           height: 50,
                                           child: ElevatedButton(
-                                            onPressed: () {},
-                                            child: Icon(Icons.filter_list_outlined),
+                                            onPressed: () {
+                                              filterByColor();
+                                            },
+                                            child: Icon(Icons.color_lens_outlined),
                                             style: ElevatedButton.styleFrom(
                                                 primary: Colors.amber,
                                                 shape: RoundedRectangleBorder(
