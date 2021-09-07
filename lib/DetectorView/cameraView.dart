@@ -94,33 +94,6 @@ class _CameraViewState extends State<CameraView> {
                   width: MediaQuery.of(context).size.width / 3 - 10,
                   child: ElevatedButton(
                     onPressed: () async {
-                      print("galeri butonuna tıklandı ");
-                    },
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(50),
-                            bottomLeft: Radius.circular(50)),
-                      ),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text("Galeri"),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Icon(Icons.photo),
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 75,
-                  width: MediaQuery.of(context).size.width / 3 - 10,
-                  child: ElevatedButton(
-                    onPressed: () async {
                       await _camera!.stopImageStream();
                       final image = await _camera!.takePicture();
                       Navigator.push(context, MaterialPageRoute(builder: (context)=> DisplayPictureScreen(
@@ -128,7 +101,7 @@ class _CameraViewState extends State<CameraView> {
                     },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(0)),
+                        borderRadius: BorderRadius.all(Radius.circular(60)),
                       )
                     ),
                     child: Container(
@@ -146,35 +119,7 @@ class _CameraViewState extends State<CameraView> {
                     ),
                   ),
                 ),
-                Container(
-                  height: 75,
-                  width: MediaQuery.of(context).size.width / 3 - 10,
-                  // ignore: deprecated_member_use
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(50),
-                            bottomRight: Radius.circular(50)),
-                      ),
-                    ),
-                    child: Container(
-                      //margin: EdgeInsets.all(5),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text("Ses"),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Icon(Icons.mic),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+
               ],
             ),
           ),
@@ -365,4 +310,79 @@ await _camera!.stopImageStream();
                       } catch (e) {
                         print(e);
                       }
+ */
+
+
+//galeri butonu
+
+/*
+
+Container(
+                  height: 75,
+                  width: MediaQuery.of(context).size.width / 3 - 10,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      print("galeri butonuna tıklandı ");
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(50),
+                            bottomLeft: Radius.circular(50)),
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text("Galeri"),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Icon(Icons.photo),
+                      ],
+                    ),
+                  ),
+                ),
+
+ */
+
+
+
+
+//mikrofon butonu
+
+
+/*
+
+ Container(
+                  height: 75,
+                  width: MediaQuery.of(context).size.width / 3 - 10,
+                  // ignore: deprecated_member_use
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(50),
+                            bottomRight: Radius.circular(50)),
+                      ),
+                    ),
+                    child: Container(
+                      //margin: EdgeInsets.all(5),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text("Ses"),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Icon(Icons.mic),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
  */

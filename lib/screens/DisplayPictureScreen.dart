@@ -129,8 +129,8 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
         '*************************************************************************---');
 
 
-    okunanText = recognisedText.text.trim();
-
+    okunanText = recognisedText.text.trim().replaceAll("\n", " ");
+    
 
 
 
