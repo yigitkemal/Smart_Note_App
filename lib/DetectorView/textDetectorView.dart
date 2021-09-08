@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_text_recognititon/DetectorView/cameraView.dart';
+import 'package:flutter_text_recognititon/homePage.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 
 import 'painters/text_detector_painter.dart';
@@ -22,12 +23,22 @@ class _TextDetectorViewState extends State<TextDetectorView> {
 
   @override
   Widget build(BuildContext context) {
-    return CameraView(
-      title: 'Text Detector',
-      customPaint: customPaint,
-      onImage: (inputImage) {
-        processImage(inputImage);
+    return WillPopScope(
+      onWillPop: () async {
+        dispose();
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => Home()),
+          ModalRoute.withName('/'),
+        );
+        return false;
       },
+      child: CameraView(
+        title: 'Text Detector',
+        customPaint: customPaint,
+        onImage: (inputImage) {
+          processImage(inputImage);
+        },
+      ),
     );
   }
 

@@ -3,7 +3,10 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_text_recognititon/DetectorView/textDetectorView.dart';
+import 'package:flutter_text_recognititon/homePage.dart';
 import 'package:flutter_text_recognititon/screens/DisplayPictureScreen.dart';
+import 'package:flutter_text_recognititon/screens/addNotesScreen.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -14,10 +17,10 @@ enum ScreenMode { liveFeed, gallery }
 class CameraView extends StatefulWidget {
   CameraView(
       {Key? key,
-        required this.title,
-        required this.customPaint,
-        required this.onImage,
-        this.initialDirection = CameraLensDirection.back})
+      required this.title,
+      required this.customPaint,
+      required this.onImage,
+      this.initialDirection = CameraLensDirection.back})
       : super(key: key);
 
   final String title;
@@ -71,8 +74,8 @@ class _CameraViewState extends State<CameraView> {
                 _mode == ScreenMode.liveFeed
                     ? Icons.photo_library_outlined
                     : (Platform.isIOS
-                    ? Icons.camera_alt_outlined
-                    : Icons.camera),
+                        ? Icons.camera_alt_outlined
+                        : Icons.camera),
               ),
             ),
           ),
@@ -85,7 +88,7 @@ class _CameraViewState extends State<CameraView> {
             /// butonlar burada
             alignment: Alignment.bottomCenter,
             margin: EdgeInsets.only(
-                bottom: (MediaQuery.of(context).size.height / 10) ),
+                bottom: (MediaQuery.of(context).size.height / 10)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -96,14 +99,19 @@ class _CameraViewState extends State<CameraView> {
                     onPressed: () async {
                       await _camera!.stopImageStream();
                       final image = await _camera!.takePicture();
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> DisplayPictureScreen(
-                        imagePath: image.path, onImage: (InputImage inputImage) {},)));
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) => DisplayPictureScreen(
+                                  imagePath: image.path,
+                                  onImage: (InputImage inputImage) {},
+                                )),
+                        ModalRoute.withName('/'),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(60)),
-                      )
-                    ),
+                        shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(60)),
+                    )),
                     child: Container(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -119,7 +127,6 @@ class _CameraViewState extends State<CameraView> {
                     ),
                   ),
                 ),
-
               ],
             ),
           ),
@@ -129,7 +136,6 @@ class _CameraViewState extends State<CameraView> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,*/
     );
   }
-
 
   Widget _body() {
     Widget body;
@@ -160,20 +166,20 @@ class _CameraViewState extends State<CameraView> {
     return ListView(shrinkWrap: true, children: [
       _image != null
           ? Container(
-        height: 400,
-        width: 400,
-        child: Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-            Image.file(_image!),
-            if (widget.customPaint != null) widget.customPaint!,
-          ],
-        ),
-      )
+              height: 400,
+              width: 400,
+              child: Stack(
+                fit: StackFit.expand,
+                children: <Widget>[
+                  Image.file(_image!),
+                  if (widget.customPaint != null) widget.customPaint!,
+                ],
+              ),
+            )
           : Icon(
-        Icons.image,
-        size: 200,
-      ),
+              Icons.image,
+              size: 200,
+            ),
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 16),
         child: ElevatedButton(
@@ -184,9 +190,8 @@ class _CameraViewState extends State<CameraView> {
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 16),
         child: ElevatedButton(
-          child: Text('Take a picture'),
-          onPressed: () => _getImage(ImageSource.camera)
-        ),
+            child: Text('Take a picture'),
+            onPressed: () => _getImage(ImageSource.camera)),
       ),
     ]);
   }
@@ -259,7 +264,7 @@ class _CameraViewState extends State<CameraView> {
     final bytes = allBytes.done().buffer.asUint8List();
 
     final Size imageSize =
-    Size(image.width.toDouble(), image.height.toDouble());
+        Size(image.width.toDouble(), image.height.toDouble());
 
     final camera = cameras[_cameraIndex];
     final imageRotation =
@@ -271,7 +276,7 @@ class _CameraViewState extends State<CameraView> {
             InputImageFormat.NV21;
 
     final planeData = image.planes.map(
-          (Plane plane) {
+      (Plane plane) {
         return InputImagePlaneMetadata(
           bytesPerRow: plane.bytesPerRow,
           height: plane.height,
@@ -288,7 +293,7 @@ class _CameraViewState extends State<CameraView> {
     );
 
     final inputImage =
-    InputImage.fromBytes(bytes: bytes, inputImageData: inputImageData);
+        InputImage.fromBytes(bytes: bytes, inputImageData: inputImageData);
 
     widget.onImage(inputImage);
   }
@@ -311,7 +316,6 @@ await _camera!.stopImageStream();
                         print(e);
                       }
  */
-
 
 //galeri butonu
 
@@ -347,11 +351,7 @@ Container(
 
  */
 
-
-
-
 //mikrofon butonu
-
 
 /*
 

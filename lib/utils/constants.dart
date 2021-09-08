@@ -2,9 +2,9 @@ const mAppName = 'Racoon Note';
 
 const imageRadius = 40.0;
 
-const mAdMobAppId = 'ca-app-pub-1399327544318575~9252792385';
-const mAdMobBannerId = 'ca-app-pub-1399327544318575/4738832302';
-const mAdMobInterstitialId = 'ca-app-pub-1399327544318575/8573796227';
+const mAdMobAppId = 'ca-app-pub-2198773595076159~3113709030';
+const mAdMobBannerId = 'ca-app-pub-2198773595076159/1361643665';
+const mAdMobInterstitialId = 'ca-app-pub-2198773595076159/5179252132';
 
 List<String> testDevices = ['551597FF6B95q52FEBB440722967BCB6F'];
 

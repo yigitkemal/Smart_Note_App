@@ -2,7 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_text_recognititon/DetectorView/cameraView.dart';
 import 'package:flutter_text_recognititon/DetectorView/painters/text_detector_painter.dart';
+import 'package:flutter_text_recognititon/DetectorView/textDetectorView.dart';
+import 'package:flutter_text_recognititon/homePage.dart';
 import 'package:flutter_text_recognititon/main.dart';
 import 'package:flutter_text_recognititon/model/notesModel.dart';
 import 'package:flutter_text_recognititon/screens/addNotesScreen.dart';
@@ -48,51 +51,57 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return _image != null
-        ? MaterialApp(
-            debugShowCheckedModeBanner: false,
-            home: SafeArea(
-              child: Container(
-                color: Colors.black,
-                padding: const EdgeInsets.symmetric(
-                    vertical: 40.0, horizontal: 20.0),
-                child: _image != null
-                    ? Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height,
-                        child: Stack(
-                          children: [
-                            Container(
-                                alignment: Alignment.center,
-                                child: Image.file(_image!)),
-                            Container(
-                              alignment: Alignment.bottomCenter,
-                              margin: EdgeInsets.only(
-                                  bottom: (MediaQuery.of(context).size.height /
-                                      10)),
-                              child: AppButton(
-                                height: 60,
-                                width: context.width(),
-                                color: PrimaryBackgroundColor,
-                                text: 'Not Olarak Oku',
-                                textColor: appStore.isDarkMode
-                                    ? splashBgColor
-                                    : scaffoldColorDark,
-                                onTap: () {
-                                  processImage(
-                                      InputImage.fromFilePath(_image!.path));
-                                },
+    return WillPopScope(
+      onWillPop: ()async{
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => TextDetectorView()));
+        return false;
+      },
+      child: _image != null
+          ? MaterialApp(
+              debugShowCheckedModeBanner: false,
+              home: SafeArea(
+                child: Container(
+                  color: Colors.black,
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 40.0, horizontal: 20.0),
+                  child: _image != null
+                      ? Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height,
+                          child: Stack(
+                            children: [
+                              Container(
+                                  alignment: Alignment.center,
+                                  child: Image.file(_image!)),
+                              Container(
+                                alignment: Alignment.bottomCenter,
+                                margin: EdgeInsets.only(
+                                    bottom: (MediaQuery.of(context).size.height /
+                                        10)),
+                                child: AppButton(
+                                  height: 60,
+                                  width: context.width(),
+                                  color: PrimaryBackgroundColor,
+                                  text: 'Not Olarak Oku',
+                                  textColor: appStore.isDarkMode
+                                      ? splashBgColor
+                                      : scaffoldColorDark,
+                                  onTap: () {
+                                    processImage(
+                                        InputImage.fromFilePath(_image!.path));
+                                  },
+                                ),
                               ),
-                            ),
-                          ],
-                        )) // Buraya bir gövde oluşturup not sayfasına akarımı sağlamam gerekli
-                    : Container(
-                        color: Colors.green,
-                      ),
+                            ],
+                          )) // Buraya bir gövde oluşturup not sayfasına akarımı sağlamam gerekli
+                      : Container(
+                          color: Colors.green,
+                        ),
+                ),
               ),
-            ),
-          )
-        : Center(child: CircularProgressIndicator());
+            )
+          : Center(child: CircularProgressIndicator()),
+    );
   }
 
   onImageIsCome() async {
@@ -125,15 +134,8 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
     print('Found ${recognisedText.blocks.length} textBlocks');
     //kesilmiş ekranda notu buraya almayı başarabiliyorum, not modelin içine yollayacak şekilde doldurup. AddNotesScreene yollayabilirsem problemim çözülecek
     ///notu burada okuyabiliyorum AddNotesScreene buradaki texti yollayabilmem gerekli.
-    print(recognisedText.text +
-        '*************************************************************************---');
-
 
     okunanText = recognisedText.text.trim().replaceAll("\n", " ");
-    
-
-
-
 
     if (inputImage.inputImageData?.size != null &&
         inputImage.inputImageData?.imageRotation != null) {
