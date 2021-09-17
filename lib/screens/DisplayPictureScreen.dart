@@ -53,7 +53,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: ()async{
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => TextDetectorView()));
+        Navigator.of(context).pop(MaterialPageRoute(builder: (context) => TextDetectorView()));
         return false;
       },
       child: _image != null

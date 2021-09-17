@@ -13,6 +13,8 @@ import 'package:flutter_text_recognititon/main.dart';
 import 'package:flutter_text_recognititon/model/notesModel.dart';
 import 'package:flutter_text_recognititon/screens/addNotesScreen.dart';
 import 'package:flutter_text_recognititon/screens/addToDoScreen.dart';
+import 'package:flutter_text_recognititon/store/AppStore.dart';
+import 'package:flutter_text_recognititon/utils/colors.dart';
 import 'package:flutter_text_recognititon/utils/colors.dart';
 import 'package:flutter_text_recognititon/utils/common.dart';
 import 'package:flutter_text_recognititon/utils/constants.dart';
@@ -133,11 +135,12 @@ class _HomeState extends State<Home>{
                   flexibleSpace: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8),bottomRight: Radius.circular(8)) ,
-                      gradient: LinearGradient(
+                     //appbar gradienti uygulamanın koyu ve açık modlarına geçişte düzgün olarak çalışmıyor.
+                     /*gradient: LinearGradient(
                         begin: Alignment.bottomLeft,
                         end: Alignment.topRight,
                         colors: appStore.isDarkMode ? [scaffoldColorDark, splashBgColor.withOpacity(0.2)] : [PrimaryColor, blueGreyColor.withOpacity(0.2)],
-                      ),
+                      ),*/
                     ),
                     child: FlexibleSpaceBar(
                       centerTitle: true,
@@ -159,7 +162,7 @@ class _HomeState extends State<Home>{
                                       //width: MediaQuery.of(context).size.width-100,
                                       padding: EdgeInsets.only(left: 8.0),
                                       decoration: BoxDecoration(
-                                          color: Colors.white.withOpacity(0.3),
+                                          color: appStore.isDarkMode ? scaffoldLightColor.withOpacity(0.3) : Colors.blueGrey.withOpacity(0.1),
                                           borderRadius: BorderRadius.circular(8.0)),
                                       child: TextField(
                                         controller: searchedTextController,
@@ -265,7 +268,8 @@ class _HomeState extends State<Home>{
         ],
       ),
       drawer: DashboardDrawerWidget(),
-      bottomNavigationBar: BottomNavigationBar(
+      // şu anda uygulamada ikinci bir sayfa olmasını gerektiricek bir durum bulunmuyor.
+      /*bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
               icon: Icon(FontAwesome5.home), label: "Ana Sayfa"),
@@ -276,7 +280,7 @@ class _HomeState extends State<Home>{
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.deepPurple,
         onTap: _onItemTapped,
-      ),
+      ),*/
     );
   }
 

@@ -37,7 +37,7 @@ const FIT_COUNT = 'FIT_COUNT';
 const CROSS_COUNT = 'CROSS_COUNT';
 const SELECTED_LAYOUT_TYPE_DASHBOARD = 'SELECTED_LAYOUT_TYPE_DASHBOARD';
 
-const dark_mode_image = 'images/logo_night_mode.jpg';
+const dark_mode_image = 'images/logo_night_mode.png';
 const light_mode_image = 'images/logo_light_mode.png';
 const no_data = 'images/no_data.png';
 

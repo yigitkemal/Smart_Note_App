@@ -122,70 +122,80 @@ class AddNotesScreenState extends State<AddNotesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: appBarWidget(
-        add_note,
-        color: _mSelectColor ?? PrimaryBackgroundColor,
-        textColor: scaffoldColorDark,
-        brightness: Brightness.light,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.more_vert_rounded),
-            color: scaffoldColorDark,
-            onPressed: () async {
-              hideKeyboard(context);
-              noteColorPicker();
-            },
-          ),
-        ],
-        elevation: 0,
-      ),
-      body: Container(
-        color: _mSelectColor ?? Colors.white,
-        height: double.infinity,
-        padding: EdgeInsets.all(16),
-        child: Container(
+    return WillPopScope(
+      onWillPop: ()async{
+        Navigator.of(context).pop(MaterialPageRoute(builder: (context) => Home()));
+        return false;
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: appBarWidget(
+          add_note,
+          color: _mSelectColor ?? PrimaryBackgroundColor,
+          textColor: scaffoldColorDark,
+          brightness: Brightness.light,
+          actions: [
+            IconButton(
+              icon: Icon(Icons.more_vert_rounded),
+              color: scaffoldColorDark,
+              onPressed: () async {
+                hideKeyboard(context);
+                noteColorPicker();
+              },
+            ),
+          ],
+          elevation: 0,
+        ),
+        body: Container(
+          color: _mSelectColor ?? Colors.white,
           height: double.infinity,
-          child: Column(
-            children: [
-              _mIsUpdateNote && widget.notesModel!.collaborateWith!.first != getStringAsync(USER_EMAIL)
-                  ? Row(
-                children: [
-                  Text('$shared_by :', style: boldTextStyle(color: Colors.black, size: 18)),
-                  4.width,
-                  Text(widget.notesModel!.collaborateWith!.first.validate(), style: boldTextStyle(color: Colors.black, size: 18)),
-                ],
-              )
-                  : SizedBox(),
-              TextField(
-                autofocus: _mIsUpdateNote ? false : true,
-                controller: titleController,
-                cursorColor: Colors.black,
-                decoration: InputDecoration(border: InputBorder.none, hintText: 'Title'),
-                style: boldTextStyle(size: 20, color: Colors.black),
-                textCapitalization: TextCapitalization.sentences,
-                textInputAction: TextInputAction.next,
-                onSubmitted: (val) {
-                  FocusScope.of(context).requestFocus(noteNode);
-                },
-                maxLines: 1,
-              ),
-              SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
-                child: TextField(
-                  controller: notesController,
-                  focusNode: noteNode,
+          padding: EdgeInsets.all(16),
+          child: Container(
+            height: double.infinity,
+            child: Column(
+              children: [
+                _mIsUpdateNote && widget.notesModel!.collaborateWith!.first != getStringAsync(USER_EMAIL)
+                    ? Row(
+                  children: [
+                    Text('$shared_by :', style: boldTextStyle(color: Colors.black, size: 18)),
+                    4.width,
+                    Text(widget.notesModel!.collaborateWith!.first.validate(), style: boldTextStyle(color: Colors.black, size: 18)),
+                  ],
+                )
+                    : SizedBox(),
+                TextField(
+                  autofocus: _mIsUpdateNote ? false : true,
+                  controller: titleController,
                   cursorColor: Colors.black,
-                  decoration: InputDecoration(border: InputBorder.none, hintText: 'Write Notes here'),
-                  style: primaryTextStyle(color: Colors.black),
-                  textInputAction: TextInputAction.newline,
+                  decoration: InputDecoration(border: InputBorder.none, hintText: 'Title'),
+                  style: boldTextStyle(size: 20, color: Colors.black),
                   textCapitalization: TextCapitalization.sentences,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
+                  textInputAction: TextInputAction.next,
+                  onSubmitted: (val) {
+                    FocusScope.of(context).requestFocus(noteNode);
+                  },
+                  maxLines: 1,
                 ),
-              ).expand(),
-            ],
+                Stack(
+                  children: [
+                    SingleChildScrollView(
+                      physics: BouncingScrollPhysics(),
+                      child: TextField(
+                        controller: notesController,
+                        focusNode: noteNode,
+                        cursorColor: Colors.black,
+                        decoration: InputDecoration(border: InputBorder.none, hintText: 'Write Notes here'),
+                        style: primaryTextStyle(color: Colors.black),
+                        textInputAction: TextInputAction.newline,
+                        textCapitalization: TextCapitalization.sentences,
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
+                      ),
+                    ).expand(),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

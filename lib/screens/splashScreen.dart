@@ -62,7 +62,7 @@ class SplashScreenState extends State<SplashScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           commonCacheImageWidget(getBoolAsync(IS_DARK_MODE, defaultValue: false) ? dark_mode_image : light_mode_image, 150, fit: BoxFit.cover),
-          Text(mAppName, style: boldTextStyle(size: 32)),
+          //Text(mAppName, style: boldTextStyle(size: 32)),
         ],
       ).center(),
     );

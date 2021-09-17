@@ -7,8 +7,8 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:icon="@mipmap/ic_launcher"
-        android:label="flutter_text_recognititon">
+        android:icon="@mipmap/launcher_icon"
+        android:label="Racoon Note">
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

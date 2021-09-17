@@ -14,6 +14,8 @@ import '../main.dart';
 
 enum ScreenMode { liveFeed, gallery }
 
+//  _getImage(ImageSource.gallery)
+
 class CameraView extends StatefulWidget {
   CameraView(
       {Key? key,
@@ -63,7 +65,7 @@ class _CameraViewState extends State<CameraView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
         title: Text(widget.title),
         actions: [
           Padding(
@@ -80,7 +82,7 @@ class _CameraViewState extends State<CameraView> {
             ),
           ),
         ],
-      ),
+      ),*/
       body: Stack(
         children: [
           _body(),
@@ -132,8 +134,6 @@ class _CameraViewState extends State<CameraView> {
           ),
         ],
       ),
-      /*floatingActionButton: _floatingActionButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,*/
     );
   }
 
