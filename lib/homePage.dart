@@ -98,7 +98,7 @@ class _HomeState extends State<Home>{
                   centerTitle: true,
                   title: Container(
                       child: Text(mAppName,style: TextStyle(fontSize: 24,),)),
-                  actions: [
+                 /* actions: [
                     /*IconButton(
                       icon: Icon(
                         Icons.color_lens_outlined,
@@ -129,11 +129,20 @@ class _HomeState extends State<Home>{
                                 BorderRadius.all(Radius.circular(50))),
                       ),
                     ),
-                  ],
+                  ],*/
                   pinned: true,
                   expandedHeight: MediaQuery.of(context).size.height/6,
                   flexibleSpace: Container(
                     decoration: BoxDecoration(
+                      color: appStore.isDarkMode ? scaffoldColorDark : scaffoldLightColor,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black87.withOpacity(0.2),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
                       borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8),bottomRight: Radius.circular(8)) ,
                      //appbar gradienti uygulamanın koyu ve açık modlarına geçişte düzgün olarak çalışmıyor.
                      /*gradient: LinearGradient(
