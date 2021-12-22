@@ -26,10 +26,7 @@ class _TextDetectorViewState extends State<TextDetectorView> {
     return WillPopScope(
       onWillPop: () async {
         dispose();
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => Home()),
-          ModalRoute.withName('/'),
-        );
+        Navigator.of(context).pop();
         return false;
       },
       child: CameraView(

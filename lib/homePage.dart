@@ -182,7 +182,7 @@ class _HomeState extends State<Home>{
                                           });
                                         },
                                         decoration: InputDecoration(
-                                          hintText: "Aradığınız kelimeyi giriniz...",
+                                          hintText: "Enter the word you are looking for......",
                                           hintStyle: TextStyle(
                                             color: appStore.isDarkMode ? scaffoldLightColor : scaffoldColorDark,
                                           ),
