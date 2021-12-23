@@ -101,13 +101,12 @@ class _CameraViewState extends State<CameraView> {
                     onPressed: () async {
                       await _camera!.stopImageStream();
                       final image = await _camera!.takePicture();
-                      Navigator.of(context).pushAndRemoveUntil(
+                      Navigator.of(context).push(
                         MaterialPageRoute(
                             builder: (context) => DisplayPictureScreen(
                                   imagePath: image.path,
                                   onImage: (InputImage inputImage) {},
                                 )),
-                        ModalRoute.withName('/'),
                       );
                     },
                     style: ElevatedButton.styleFrom(
