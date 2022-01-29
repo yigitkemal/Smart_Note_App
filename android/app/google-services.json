@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:348638697691:android:cd846c3276c404f86b94fe",
         "android_client_info": {
-          "package_name": "com.example.flutter_text_recognititon"
+          "package_name": "com.treeapp.flutter_text_recognititon"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "348638697691-efoen68htbk8gllnp8h4ltb66u1c1ao2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.flutter_text_recognititon",
+            "package_name": "com.treeapp.flutter_text_recognititon",
             "certificate_hash": "5734b81188af7fff5f804a06f18ce4edf81900de"
           }
         },
