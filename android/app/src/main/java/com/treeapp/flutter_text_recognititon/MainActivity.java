@@ -1,4 +1,5 @@
-package com.example.flutter_text_recognititon;
+package com.treeapp.flutter_text_recognititon;
+
 
 import io.flutter.embedding.android.FlutterActivity;
 
